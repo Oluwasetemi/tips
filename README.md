@@ -1,6 +1,12 @@
 ## git-tips
 > Collection of `git-tips`, want to add your tips? Checkout [contributing.md](./contributing.md)
 
+[English](http://git.io/git-tips) | [中文](https://github.com/521xueweihan/git-tips)
+
+### __Tools:__
+
+* [git-tip](https://www.npmjs.com/package/git-tip) - A handy CLI to make optimum use of these tips.
+
 P.S: All these commands are tested on `git version 2.7.4 (Apple Git-66)`.
 
 <!-- @doxie.inject start toc -->
@@ -22,10 +28,13 @@ P.S: All these commands are tested on `git version 2.7.4 (Apple Git-66)`.
 * [Track upstream branch](#track-upstream-branch)
 * [Delete local branch](#delete-local-branch)
 * [Delete remote branch](#delete-remote-branch)
+* [Delete local tag](#delete-local-tag)
+* [Delete remote tag](#delete-remote-tag)
 * [Undo local changes with the last content in head](#undo-local-changes-with-the-last-content-in-head)
 * [Revert: Undo a commit by creating a new commit](#revert-undo-a-commit-by-creating-a-new-commit)
 * [Reset: Discard commits, advised for private branch](#reset-discard-commits-advised-for-private-branch)
 * [Reword the previous commit message](#reword-the-previous-commit-message)
+* [See commit history for just the current branch](#see-commit-history-for-just-the-current-branch)
 * [Amend author.](#amend-author)
 * [Reset author, after author has been changed in the global config.](#reset-author-after-author-has-been-changed-in-the-global-config)
 * [Changing a remote's URL](#changing-a-remotes-url)
@@ -58,7 +67,7 @@ P.S: All these commands are tested on `git version 2.7.4 (Apple Git-66)`.
 * [Update all the submodules](#update-all-the-submodules)
 * [Show all commits in the current branch yet to be merged to master](#show-all-commits-in-the-current-branch-yet-to-be-merged-to-master)
 * [Rename a branch](#rename-a-branch)
-* [rebases 'feature' to 'master' and merges it in to master ](#rebases-feature-to-master-and-merges-it-in-to-master)
+* [Rebases 'feature' to 'master' and merges it in to master ](#rebases-feature-to-master-and-merges-it-in-to-master)
 * [Archive the `master` branch](#archive-the-master-branch)
 * [Modify previous commit without modifying the commit message](#modify-previous-commit-without-modifying-the-commit-message)
 * [Prunes references to remote branches that have been deleted in the remote.](#prunes-references-to-remote-branches-that-have-been-deleted-in-the-remote)
@@ -75,6 +84,7 @@ P.S: All these commands are tested on `git version 2.7.4 (Apple Git-66)`.
 * [Fetch pull request by ID to a local branch](#fetch-pull-request-by-id-to-a-local-branch)
 * [Show the most recent tag on the current branch.](#show-the-most-recent-tag-on-the-current-branch)
 * [Show inline word diff.](#show-inline-word-diff)
+* [Show changes using common diff tools.](#show-changes-using-common-diff-tools)
 * [Don’t consider changes for tracked file.](#dont-consider-changes-for-tracked-file)
 * [Undo assume-unchanged.](#undo-assume-unchanged)
 * [Clean the files from `.gitignore`.](#clean-the-files-from-gitignore)
@@ -83,16 +93,18 @@ P.S: All these commands are tested on `git version 2.7.4 (Apple Git-66)`.
 * [Always rebase instead of merge on pull.](#always-rebase-instead-of-merge-on-pull)
 * [List all the alias and configs.](#list-all-the-alias-and-configs)
 * [Make git case sensitive.](#make-git-case-sensitive)
+* [Add custom editors.](#add-custom-editors)
 * [Auto correct typos.](#auto-correct-typos)
 * [Check if the change was a part of a release.](#check-if-the-change-was-a-part-of-a-release)
 * [Dry run. (any command that supports dry-run flag should do.)](#dry-run-any-command-that-supports-dry-run-flag-should-do)
 * [Marks your commit as a fix of a previous commit.](#marks-your-commit-as-a-fix-of-a-previous-commit)
-* [squash fixup commits normal commits.](#squash-fixup-commits-normal-commits)
-* [skip staging area during commit.](#skip-staging-area-during-commit)
+* [Squash fixup commits normal commits.](#squash-fixup-commits-normal-commits)
+* [Skip staging area during commit.](#skip-staging-area-during-commit)
+* [Interactive staging.](#interactive-staging)
 * [List ignored files.](#list-ignored-files)
 * [Status of ignored files.](#status-of-ignored-files)
 * [Commits in Branch1 that are not in Branch2](#commits-in-branch1-that-are-not-in-branch2)
-* [reuse recorded resolution, record and reuse previous conflicts resolutions.](#reuse-recorded-resolution-record-and-reuse-previous-conflicts-resolutions)
+* [Reuse recorded resolution, record and reuse previous conflicts resolutions.](#reuse-recorded-resolution-record-and-reuse-previous-conflicts-resolutions)
 * [Open all conflicted files in an editor.](#open-all-conflicted-files-in-an-editor)
 * [Count unpacked number of objects and their disk consumption.](#count-unpacked-number-of-objects-and-their-disk-consumption)
 * [Prune all unreachable objects from the object database.](#prune-all-unreachable-objects-from-the-object-database)
@@ -100,10 +112,9 @@ P.S: All these commands are tested on `git version 2.7.4 (Apple Git-66)`.
 * [View the GPG signatures in the commit log](#view-the-gpg-signatures-in-the-commit-log)
 * [Remove entry in the global config.](#remove-entry-in-the-global-config)
 * [Checkout a new branch without any history](#checkout-a-new-branch-without-any-history)
-* [File diff between staging and the last file version.](#file-diff-between-staging-and-the-last-file-version)
 * [Extract file from another branch.](#extract-file-from-another-branch)
 * [List only the root and merge commits.](#list-only-the-root-and-merge-commits)
-* [Merge previous two commits into one.](#merge-previous-two-commits-into-one)
+* [Change previous two commits with an interactive rebase.](#change-previous-two-commits-with-an-interactive-rebase)
 * [List all branch is WIP](#list-all-branch-is-wip)
 * [Find guilty with binary search](#find-guilty-with-binary-search)
 * [Bypass pre-commit and commit-msg githooks](#bypass-pre-commit-and-commit-msg-githooks)
@@ -111,6 +122,32 @@ P.S: All these commands are tested on `git version 2.7.4 (Apple Git-66)`.
 * [Clone a single branch](#clone-a-single-branch)
 * [Create and switch new branch](#create-and-switch-new-branch)
 * [Ignore file mode changes on commits](#ignore-file-mode-changes-on-commits)
+* [Turn off git colored terminal output](#turn-off-git-colored-terminal-output)
+* [Specific color settings](#specific-color-settings)
+* [Show all local branches ordered by recent commits](#show-all-local-branches-ordered-by-recent-commits)
+* [Find lines matching the pattern (regex or string) in tracked files](#find-lines-matching-the-pattern-regex-or-string-in-tracked-files)
+* [Clone a shallow copy of a repository](#clone-a-shallow-copy-of-a-repository)
+* [Search Commit log across all branches for given text](#search-commit-log-across-all-branches-for-given-text)
+* [Get first commit in a branch (from master)](#get-first-commit-in-a-branch-from-master)
+* [Unstaging Staged file](#unstaging-staged-file)
+* [Force push to Remote Repository](#force-push-to-remote-repository)
+* [Adding Remote name](#adding-remote-name)
+* [Show the author, time and last revision made to each line of a given file](#show-the-author-time-and-last-revision-made-to-each-line-of-a-given-file)
+* [Group commits by authors and title](#group-commits-by-authors-and-title)
+* [Forced push but still ensure you don't overwrite other's work](#forced-push-but-still-ensure-you-dont-overwrite-others-work)
+* [Show how many lines does an author contribute](#show-how-many-lines-does-an-author-contribute)
+* [Revert: Reverting an entire merge](#revert-reverting-an-entire-merge)
+* [Number of commits in a branch](#number-of-commits-in-a-branch)
+* [Alias: git undo](#alias-git-undo)
+* [Add object notes](#add-object-notes)
+* [Show all the git-notes](#show-all-the-git-notes)
+* [Apply commit from another repository](#apply-commit-from-another-repository)
+* [Specific fetch reference](#specific-fetch-reference)
+* [Find common ancestor of two branches](#find-common-ancestor-of-two-branches)
+* [List unpushed git commits](#list-unpushed-git-commits)
+* [Add everything, but whitespace changes](#add-everything-but-whitespace-changes)
+* [Edit [local/global] git config](#edit-localglobal-git-config)
+* [blame on certain range](#blame-on-certain-range)
 
 <!-- Don’t remove or change the comment below – that can break automatic updates. More info at <http://npm.im/doxie.inject>. -->
 <!-- @doxie.inject end toc -->
@@ -163,6 +200,12 @@ git diff
 git diff --cached
 ```
 
+
+__Alternatives:__
+```sh
+git diff --staged
+```
+
 ## Show both staged and unstaged changes
 ```sh
 git diff HEAD
@@ -181,6 +224,12 @@ git checkout -
 ## Remove branches that have already been merged with master
 ```sh
 git branch --merged master | grep -v '^\*' | xargs -n 1 git branch -d
+```
+
+
+__Alternatives:__
+```sh
+git branch --merged master | grep -v '^\*\|  master' | xargs -n 1 git branch -d # will not delete master if master is not checked out
 ```
 
 ## List all branches and their upstreams, as well as last commit on branch
@@ -209,6 +258,16 @@ __Alternatives:__
 git push origin :<remote_branchname>
 ```
 
+## Delete local tag
+```sh
+git tag -d <tag-name>
+```
+
+## Delete remote tag
+```sh
+git push origin :refs/tags/<tag-name>
+```
+
 ## Undo local changes with the last content in head
 ```sh
 git checkout -- <file_name>
@@ -227,6 +286,11 @@ git reset <commit-ish>
 ## Reword the previous commit message
 ```sh
 git commit -v --amend
+```
+
+## See commit history for just the current branch
+```sh
+git cherry -v master
 ```
 
 ## Amend author.
@@ -440,6 +504,17 @@ git clean -df
 git submodule foreach git pull
 ```
 
+
+__Alternatives:__
+```sh
+git submodule update --init --recursive
+```
+
+
+```sh
+git submodule update --remote
+```
+
 ## Show all commits in the current branch yet to be merged to master
 ```sh
 git cherry -v master
@@ -462,9 +537,9 @@ __Alternatives:__
 git branch -m [<old-branch-name>] <new-branch-name>
 ```
 
-## rebases 'feature' to 'master' and merges it in to master 
+## Rebases 'feature' to 'master' and merges it in to master 
 ```sh
-git checkout feature && git rebase @{-1} && git checkout @{-2} && git merge @{-1}
+git rebase master feature && git checkout master && git merge -
 ```
 
 ## Archive the `master` branch
@@ -491,6 +566,22 @@ git remote prune origin
 ## Retrieve the commit hash of the initial revision.
 ```sh
  git rev-list --reverse HEAD | head -1
+```
+
+
+__Alternatives:__
+```sh
+git rev-list --max-parents=0 HEAD
+```
+
+
+```sh
+git log --pretty=oneline | tail -1 | cut -c 1-40
+```
+
+
+```sh
+git log --pretty=oneline --reverse | head -1 | cut -c 1-40
 ```
 
 ## Visualize the version tree.
@@ -565,6 +656,11 @@ git describe --tags --abbrev=0
 git diff --word-diff
 ```
 
+## Show changes using common diff tools.
+```sh
+git difftool -t <commit1> <commit2> <path>
+```
+
 ## Don’t consider changes for tracked file.
 ```sh
 git update-index --assume-unchanged <file_name>
@@ -592,6 +688,13 @@ git checkout <commit-ish> -- <file_path>
 
 ## Always rebase instead of merge on pull.
 ```sh
+git config --global pull.rebase true
+```
+
+
+__Alternatives:__
+```sh
+#git < 1.7.9
 git config --global branch.autosetuprebase always
 ```
 
@@ -603,6 +706,11 @@ git config --list
 ## Make git case sensitive.
 ```sh
 git config --global core.ignorecase false
+```
+
+## Add custom editors.
+```sh
+git config --global core.editor '$EDITOR'
 ```
 
 ## Auto correct typos.
@@ -625,14 +733,19 @@ git clean -fd --dry-run
 git commit --fixup <SHA-1>
 ```
 
-## squash fixup commits normal commits.
+## Squash fixup commits normal commits.
 ```sh
 git rebase -i --autosquash
 ```
 
-## skip staging area during commit.
+## Skip staging area during commit.
 ```sh
-git commit -am <commit message>
+git commit --only <file_path>
+```
+
+## Interactive staging.
+```sh
+git add -i
 ```
 
 ## List ignored files.
@@ -650,7 +763,7 @@ git status --ignored
 git log Branch1 ^Branch2
 ```
 
-## reuse recorded resolution, record and reuse previous conflicts resolutions.
+## Reuse recorded resolution, record and reuse previous conflicts resolutions.
 ```sh
 git config --global rerere.enabled 1
 ```
@@ -690,11 +803,6 @@ git config --global --unset <entry-name>
 git checkout --orphan <branch_name>
 ```
 
-## File diff between staging and the last file version.
-```sh
-git diff --staged
-```
-
 ## Extract file from another branch.
 ```sh
 git show <branch_name>:<file_name>
@@ -705,7 +813,7 @@ git show <branch_name>:<file_name>
 git log --first-parent
 ```
 
-## Merge previous two commits into one.
+## Change previous two commits with an interactive rebase.
 ```sh
 git rebase --interactive HEAD~2
 ```
@@ -746,9 +854,164 @@ git clone -b <branch-name> --single-branch https://github.com/user/repo.git
 git checkout -b <branch-name>
 ```
 
+
+__Alternatives:__
+```sh
+git branch <branch-name> && git checkout <branch-name>
+```
+
 ## Ignore file mode changes on commits
 ```sh
 git config core.fileMode false
+```
+
+## Turn off git colored terminal output
+```sh
+git config --global color.ui false
+```
+
+## Specific color settings
+```sh
+git config --global <specific command e.g branch, diff> <true, false or always>
+```
+
+## Show all local branches ordered by recent commits
+```sh
+git for-each-ref --sort=-committerdate --format='%(refname:short)' refs/heads/
+```
+
+## Find lines matching the pattern (regex or string) in tracked files
+```sh
+git grep --heading --line-number 'foo bar'
+```
+
+## Clone a shallow copy of a repository
+```sh
+git clone https://github.com/user/repo.git --depth 1
+```
+
+## Search Commit log across all branches for given text
+```sh
+git log --all --grep='<given-text>'
+```
+
+## Get first commit in a branch (from master)
+```sh
+git log master..<branch-name> --oneline | tail -1
+```
+
+## Unstaging Staged file
+```sh
+git reset HEAD <file-name>
+```
+
+## Force push to Remote Repository
+```sh
+git push -f <remote-name> <branch-name>
+```
+
+## Adding Remote name
+```sh
+git remote add <remote-nickname> <remote-url>
+```
+
+## Show the author, time and last revision made to each line of a given file
+```sh
+git blame <file-name>
+```
+
+## Group commits by authors and title
+```sh
+git shortlog
+```
+
+## Forced push but still ensure you don't overwrite other's work
+```sh
+git push --force-with-lease <remote-name> <branch-name>
+```
+
+## Show how many lines does an author contribute
+```sh
+git log --author='_Your_Name_Here_' --pretty=tformat: --numstat | gawk '{ add += <!-- @doxie.inject start -->; subs += <!-- @doxie.inject end -->; loc += <!-- @doxie.inject start --> - <!-- @doxie.inject end --> } END { printf "added lines: %s removed lines: %s total lines: %s
+", add, subs, loc }' -
+```
+
+
+__Alternatives:__
+```sh
+git log --author='_Your_Name_Here_' --pretty=tformat: --numstat | awk '{ add += <!-- @doxie.inject start -->; subs += <!-- @doxie.inject end -->; loc += <!-- @doxie.inject start --> - <!-- @doxie.inject end --> } END { printf "added lines: %s, removed lines: %s, total lines: %s
+", add, subs, loc }' - # on Mac OSX
+```
+
+## Revert: Reverting an entire merge
+```sh
+git revert -m 1 <commit-ish>
+```
+
+## Number of commits in a branch
+```sh
+git rev-list --count <branch-name>
+```
+
+## Alias: git undo
+```sh
+git config --global alias.undo '!f() { git reset --hard $(git rev-parse --abbrev-ref HEAD)@{${1-1}}; }; f'
+```
+
+## Add object notes
+```sh
+git notes add -m 'Note on the previous commit....'
+```
+
+## Show all the git-notes
+```sh
+git log --show-notes='*'
+```
+
+## Apply commit from another repository
+```sh
+git --git-dir=<source-dir>/.git format-patch -k -1 --stdout <SHA1> | git am -3 -k
+```
+
+## Specific fetch reference
+```sh
+git fetch origin master:refs/remotes/origin/mymaster
+```
+
+## Find common ancestor of two branches
+```sh
+diff -u <(git rev-list --first-parent BranchA) <(git rev-list --first-parent BranchB) | sed -ne 's/^ //p' | head -1
+```
+
+## List unpushed git commits
+```sh
+git log --branches --not --remotes
+```
+
+
+__Alternatives:__
+```sh
+git log @{u}..
+```
+
+
+```sh
+git cherry -v
+```
+
+## Add everything, but whitespace changes
+```sh
+git diff --ignore-all-space | git apply --cached
+```
+
+## Edit [local/global] git config
+```sh
+git config [--global] --edit
+```
+
+## blame on certain range
+```sh
+git blame -L <start>,<end>
 ```
 
 <!-- Don’t remove or change the comment below – that can break automatic updates. More info at <http://npm.im/doxie.inject>. -->

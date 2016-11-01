@@ -24,7 +24,8 @@
     "tip": "git diff"
 }, {
     "title": "Changes staged for commit",
-    "tip": "git diff --cached"
+    "tip": "git diff --cached",
+    "alternatives": ["git diff --staged"]
 }, {
     "title": "Show both staged and unstaged changes",
     "tip": "git diff HEAD"
@@ -36,7 +37,8 @@
     "tip": "git checkout -"
 }, {
     "title": "Remove branches that have already been merged with master",
-    "tip": "git branch --merged master | grep -v '^\\*' | xargs -n 1 git branch -d"
+    "tip": "git branch --merged master | grep -v '^\\*' | xargs -n 1 git branch -d",
+    "alternatives": ["git branch --merged master | grep -v '^\\*\\|  master' | xargs -n 1 git branch -d # will not delete master if master is not checked out"]
 }, {
     "title": "List all branches and their upstreams, as well as last commit on branch",
     "tip": "git branch -vv"
@@ -51,6 +53,12 @@
     "tip": "git push origin --delete <remote_branchname>",
     "alternatives": ["git push origin :<remote_branchname>"]
 }, {
+    "title": "Delete local tag",
+    "tip": "git tag -d <tag-name>"
+}, {
+    "title": "Delete remote tag",
+    "tip": "git push origin :refs/tags/<tag-name>"
+}, {
     "title": "Undo local changes with the last content in head",
     "tip": "git checkout -- <file_name>"
 }, {
@@ -62,6 +70,9 @@
 }, {
     "title": "Reword the previous commit message",
     "tip": "git commit -v --amend"
+}, {
+   "title": "See commit history for just the current branch",
+   "tip": "git cherry -v master"
 }, {
     "title": "Amend author.",
     "tip": "git commit --amend --author='Author Name <email@address.com>'"
@@ -161,7 +172,8 @@
     "alternatives": ["git clean -df"]
 }, {
     "title": "Update all the submodules",
-    "tip": "git submodule foreach git pull"
+    "tip": "git submodule foreach git pull",
+    "alternatives": ["git submodule update --init --recursive", "git submodule update --remote"]
 }, {
     "title": "Show all commits in the current branch yet to be merged to master",
     "tip": "git cherry -v master",
@@ -171,8 +183,8 @@
     "tip": "git branch -m <new-branch-name>",
     "alternatives": ["git branch -m [<old-branch-name>] <new-branch-name>"]
 }, {
-    "title": "rebases 'feature' to 'master' and merges it in to master ",
-    "tip": "git checkout feature && git rebase @{-1} && git checkout @{-2} && git merge @{-1}"
+    "title": "Rebases 'feature' to 'master' and merges it in to master ",
+    "tip": "git rebase master feature && git checkout master && git merge -"
 }, {
     "title": "Archive the `master` branch",
     "tip": "git archive master --format=zip --output=master.zip"
@@ -185,7 +197,8 @@
     "alternatives": ["git remote prune origin"]
 }, {
     "title": "Retrieve the commit hash of the initial revision.",
-    "tip": " git rev-list --reverse HEAD | head -1"
+    "tip": " git rev-list --reverse HEAD | head -1",
+    "alternatives": ["git rev-list --max-parents=0 HEAD", "git log --pretty=oneline | tail -1 | cut -c 1-40", "git log --pretty=oneline --reverse | head -1 | cut -c 1-40"]
 }, {
     "title": "Visualize the version tree.",
     "tip": "git log --pretty=oneline --graph --decorate --all",
@@ -226,6 +239,9 @@
     "title": "Show inline word diff.",
     "tip": "git diff --word-diff"
 }, {
+    "title": "Show changes using common diff tools.",
+    "tip": "git difftool -t <commit1> <commit2> <path>"
+}, {
     "title": "Don’t consider changes for tracked file.",
     "tip": "git update-index --assume-unchanged <file_name>"
 }, {
@@ -242,13 +258,17 @@
     "tip": "git checkout <commit-ish> -- <file_path>"
 }, {
     "title": "Always rebase instead of merge on pull.",
-    "tip": "git config --global branch.autosetuprebase always"
+    "tip": "git config --global pull.rebase true",
+    "alternatives" : ["#git < 1.7.9\ngit config --global branch.autosetuprebase always"]
 }, {
     "title": "List all the alias and configs.",
     "tip": "git config --list"
 }, {
     "title": "Make git case sensitive.",
     "tip": "git config --global core.ignorecase false"
+},{
+    "title": "Add custom editors.",
+    "tip": "git config --global core.editor '$EDITOR'"
 }, {
     "title": "Auto correct typos.",
     "tip": "git config --global help.autocorrect 1"
@@ -262,11 +282,14 @@
     "title": "Marks your commit as a fix of a previous commit.",
     "tip": "git commit --fixup <SHA-1>"
 }, {
-    "title": "squash fixup commits normal commits.",
+    "title": "Squash fixup commits normal commits.",
     "tip": "git rebase -i --autosquash"
 }, {
-    "title": "skip staging area during commit.",
-    "tip": "git commit -am <commit message>"
+    "title": "Skip staging area during commit.",
+    "tip": "git commit --only <file_path>"
+}, {
+    "title": "Interactive staging.",
+    "tip": "git add -i"
 }, {
     "title": "List ignored files.",
     "tip": "git check-ignore *"
@@ -277,7 +300,7 @@
     "title": "Commits in Branch1 that are not in Branch2",
     "tip": "git log Branch1 ^Branch2"
 }, {
-    "title": "reuse recorded resolution, record and reuse previous conflicts resolutions.",
+    "title": "Reuse recorded resolution, record and reuse previous conflicts resolutions.",
     "tip": "git config --global rerere.enabled 1"
 }, {
     "title": "Open all conflicted files in an editor.",
@@ -301,16 +324,13 @@
     "title": "Checkout a new branch without any history",
     "tip": "git checkout --orphan <branch_name>"
 }, {
-    "title": "File diff between staging and the last file version.",
-    "tip": "git diff --staged"
-}, {
     "title": "Extract file from another branch.",
     "tip": "git show <branch_name>:<file_name>"
 }, {
     "title": "List only the root and merge commits.",
     "tip": "git log --first-parent"
 }, {
-    "title": "Merge previous two commits into one.",
+    "title": "Change previous two commits with an interactive rebase.",
     "tip": "git rebase --interactive HEAD~2"
 }, {
     "title": "List all branch is WIP",
@@ -329,8 +349,89 @@
     "tip": "git clone -b <branch-name> --single-branch https://github.com/user/repo.git"
 },{
     "title": "Create and switch new branch",
-    "tip": "git checkout -b <branch-name>"
+    "tip": "git checkout -b <branch-name>",
+    "alternatives": ["git branch <branch-name> && git checkout <branch-name>"]
 },{
     "title": "Ignore file mode changes on commits",
     "tip": "git config core.fileMode false"
+},{
+  "title": "Turn off git colored terminal output",
+  "tip": "git config --global color.ui false"
+},{
+    "title": "Specific color settings",
+    "tip": "git config --global <specific command e.g branch, diff> <true, false or always>"
+},{
+    "title": "Show all local branches ordered by recent commits",
+    "tip": "git for-each-ref --sort=-committerdate --format='%(refname:short)' refs/heads/"
+},{
+    "title": "Find lines matching the pattern (regex or string) in tracked files",
+    "tip": "git grep --heading --line-number 'foo bar'"
+}, {
+    "title": "Clone a shallow copy of a repository",
+    "tip": "git clone https://github.com/user/repo.git --depth 1"
+}, {
+    "title": "Search Commit log across all branches for given text",
+    "tip": "git log --all --grep='<given-text>'"
+}, {
+    "title": "Get first commit in a branch (from master)",
+    "tip": "git log master..<branch-name> --oneline | tail -1"
+}, {
+    "title": "Unstaging Staged file",
+    "tip": "git reset HEAD <file-name>"
+}, {
+    "title": "Force push to Remote Repository",
+    "tip": "git push -f <remote-name> <branch-name>"
+}, {
+    "title": "Adding Remote name",
+    "tip": "git remote add <remote-nickname> <remote-url>"
+}, {
+    "title": "Show the author, time and last revision made to each line of a given file",
+    "tip": "git blame <file-name>"
+}, {
+    "title": "Group commits by authors and title",
+    "tip": "git shortlog"
+}, {
+    "title": "Forced push but still ensure you don't overwrite other's work",
+    "tip": "git push --force-with-lease <remote-name> <branch-name>"
+},{
+    "title": "Show how many lines does an author contribute",
+    "tip": "git log --author='_Your_Name_Here_' --pretty=tformat: --numstat | gawk '{ add += $1; subs += $2; loc += $1 - $2 } END { printf \"added lines: %s removed lines: %s total lines: %s\n\", add, subs, loc }' -",
+    "alternatives": ["git log --author='_Your_Name_Here_' --pretty=tformat: --numstat | awk '{ add += $1; subs += $2; loc += $1 - $2 } END { printf \"added lines: %s, removed lines: %s, total lines: %s\n\", add, subs, loc }' - # on Mac OSX"]
+},{
+    "title": "Revert: Reverting an entire merge",
+    "tip": "git revert -m 1 <commit-ish>"
+},{
+    "title": "Number of commits in a branch",
+    "tip": "git rev-list --count <branch-name>"
+},{
+    "title": "Alias: git undo",
+    "tip": "git config --global alias.undo '!f() { git reset --hard $(git rev-parse --abbrev-ref HEAD)@{${1-1}}; }; f'"
+}, {
+    "title": "Add object notes",
+    "tip": "git notes add -m 'Note on the previous commit....'"
+}, {
+    "title": "Show all the git-notes",
+    "tip": "git log --show-notes='*'"
+}, {
+    "title": "Apply commit from another repository",
+    "tip": "git --git-dir=<source-dir>/.git format-patch -k -1 --stdout <SHA1> | git am -3 -k"
+},{
+    "title": "Specific fetch reference",
+    "tip": "git fetch origin master:refs/remotes/origin/mymaster"
+}, {
+    "title": "Find common ancestor of two branches",
+    "tip": "diff -u <(git rev-list --first-parent BranchA) <(git rev-list --first-parent BranchB) | sed -ne 's/^ //p' | head -1"
+}, {
+    "title": "List unpushed git commits",
+    "tip": "git log --branches --not --remotes",
+    "alternatives": ["git log @{u}..", "git cherry -v"]
+}, {
+    "title": "Add everything, but whitespace changes",
+    "tip": "git diff --ignore-all-space | git apply --cached"
+}, {
+    "title": "Edit [local/global] git config",
+    "tip": "git config [--global] --edit"
+}, {
+    "title": "blame on certain range",
+    "tip": "git blame -L <start>,<end>"
 }]
